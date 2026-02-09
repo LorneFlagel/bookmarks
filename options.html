@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bookmarks Manager - Options</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      color: #333;
+    }
+
+    body.dark {
+      background: #1a1a2e;
+      color: #e0e0e0;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .option-group {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+    }
+
+    body.dark .option-group {
+      background: #1e1e2f;
+    }
+
+    .option-group h2 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+
+    .option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .option-row + .option-row {
+      border-top: 1px solid #e0e0e0;
+    }
+
+    body.dark .option-row + .option-row {
+      border-top-color: #333;
+    }
+
+    .option-label {
+      font-size: 14px;
+    }
+
+    .option-description {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 26px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background-color: #667eea;
+    }
+
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+
+    .saved-message {
+      color: #4CAF50;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .saved-message.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚙️ Smart Bookmarks Manager</h1>
+
+  <div class="option-group">
+    <h2>Appearance</h2>
+    <div class="option-row">
+      <div>
+        <div class="option-label">Dark Mode</div>
+        <div class="option-description">Use dark theme for the bookmarks page</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="dark-mode-toggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="option-group">
+    <h2>Behavior</h2>
+    <div class="option-row">
+      <div>
+        <div class="option-label">Confirm before deleting bookmarks</div>
+        <div class="option-description">Show a confirmation prompt when deleting a bookmark</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="confirm-delete-bookmark-toggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="option-row">
+      <div>
+        <div class="option-label">Confirm before deleting categories</div>
+        <div class="option-description">Show a confirmation prompt when deleting a category</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="confirm-delete-category-toggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="option-row">
+      <div>
+        <div class="option-label">Open bookmarks in new tab</div>
+        <div class="option-description">When off, bookmarks open in the current tab</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="open-new-tab-toggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div id="saved-message" class="saved-message">✓ Settings saved</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookmarks</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 My Bookmarks</h1>
+      <div class="header-actions">
+        <button id="toggle-dark-btn" class="btn btn-secondary" title="Toggle Dark Mode">
+          🌙 Dark
+        </button>
+        <button id="toggle-view-btn" class="btn btn-secondary" title="Toggle Layout">
+          <span id="view-icon">▦</span> Grid View
+        </button>
+        <button id="import-btn" class="btn btn-secondary">📥 Import</button>
+        <button id="export-btn" class="btn btn-secondary">📤 Export</button>
+        <button id="add-category-btn" class="btn btn-primary">➕ Add Category</button>
+        <button id="help-btn" class="btn btn-secondary" title="Help & Shortcuts">❓</button>
+      </div>
+    </header>
+
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="🔍 Search bookmarks...">
+    </div>
+
+    <div id="categories-container" class="categories-container">
+      <!-- Categories will be dynamically loaded here -->
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div id="category-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="modal-title">Add Category</h2>
+        <input type="text" id="category-name-input" placeholder="Category name">
+        <div class="modal-actions">
+          <button id="save-category-btn" class="btn btn-primary">Save</button>
+          <button id="cancel-category-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Bookmark Modal -->
+    <div id="bookmark-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="bookmark-modal-title">Add Bookmark</h2>
+        <input type="text" id="bookmark-title-input" placeholder="Bookmark title">
+        <input type="text" id="bookmark-url-input" placeholder="URL">
+        <select id="bookmark-category-select">
+          <option value="">Select category...</option>
+        </select>
+        <div class="modal-actions">
+          <button id="save-bookmark-btn" class="btn btn-primary">Save</button>
+          <button id="cancel-bookmark-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal hidden">
+      <div class="modal-content help-modal-content">
+        <h2>📖 Quick Guide</h2>
+        <div class="help-sections">
+          <div class="help-section">
+            <h3>⚡ Quick Bookmark</h3>
+            <table class="help-table">
+              <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>.</kbd></td><td>Instantly bookmark the current page</td></tr>
+              <tr><td>Toolbar icon</td><td>Click the extension icon to bookmark with options</td></tr>
+              <tr><td>Right-click</td><td>Right-click any page → "Quick Bookmark This Page"</td></tr>
+            </table>
+            <p class="help-note">All quick bookmarks go to the <strong>New</strong> category for sorting later.</p>
+          </div>
+          <div class="help-section">
+            <h3>📁 Organizing</h3>
+            <ul>
+              <li><strong>Drag bookmarks</strong> between categories to move them</li>
+              <li><strong>Drag categories</strong> by their header to reorder</li>
+              <li><strong>Click ▼</strong> to collapse/expand a category</li>
+              <li><strong>Grid / List</strong> button toggles the layout</li>
+            </ul>
+          </div>
+          <div class="help-section">
+            <h3>📤 Import & Export</h3>
+            <ul>
+              <li><strong>Export</strong> saves all bookmarks as a JSON file</li>
+              <li><strong>Import</strong> accepts JSON or HTML bookmark files</li>
+            </ul>
+          </div>
+          <div class="help-section">
+            <h3>⚙️ Settings</h3>
+            <p>Right-click the extension icon → <strong>Manage Extension</strong> → <strong>Preferences</strong> to configure dark mode and delete confirmations.</p>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button id="close-help-btn" class="btn btn-primary">Got it!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Import Bookmarks</h2>
+        <p>Select a bookmark file to import (HTML or JSON format)</p>
+        <input type="file" id="file-input" accept=".html,.json">
+        <div class="modal-actions">
+          <button id="confirm-import-btn" class="btn btn-primary">Import</button>
+          <button id="cancel-import-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="newtab.js"></script>
+</body>
+</html>
