@@ -43,6 +43,8 @@ let bookmarks = [];
 let viewMode = 'list'; // 'list' or 'grid'
 let darkMode = false;
 let collapsedCategories = {}; // { categoryId: true/false }
+let undoTimeout = null;
+let undoData = null; // { type: 'bookmark'|'category', data: {...} }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
@@ -432,6 +434,10 @@ async function deleteCategory(categoryId) {
     return;
   }
   
+  // Store category and its bookmarks for undo
+  const deletedCategory = categories.find(c => c.id === categoryId);
+  const categoryBookmarks = bookmarks.filter(b => b.categoryId === categoryId);
+  
   // Move bookmarks to "New" category
   bookmarks = bookmarks.map(b => {
     if (b.categoryId === categoryId) {
@@ -446,6 +452,14 @@ async function deleteCategory(categoryId) {
   await Storage.set('bookmarks', bookmarks);
   
   renderCategories();
+  
+  // Show undo toast
+  undoData = {
+    type: 'category',
+    category: deletedCategory,
+    bookmarks: categoryBookmarks
+  };
+  showToast(`Category "${deletedCategory.name}" deleted`, true);
 }
 
 // Bookmark Modal
@@ -551,9 +565,19 @@ async function deleteBookmark(bookmarkId) {
     return;
   }
   
+  // Store bookmark for undo
+  const deletedBookmark = bookmarks.find(b => b.id === bookmarkId);
+  
   bookmarks = bookmarks.filter(b => b.id !== bookmarkId);
   await Storage.set('bookmarks', bookmarks);
   renderCategories();
+  
+  // Show undo toast
+  undoData = {
+    type: 'bookmark',
+    bookmark: deletedBookmark
+  };
+  showToast(`Bookmark "${deletedBookmark.title}" deleted`, true);
 }
 
 // Drag and Drop
@@ -911,6 +935,88 @@ function updateDarkModeButton() {
     btn.innerHTML = '☀️ Light';
   } else {
     btn.innerHTML = '🌙 Dark';
+  }
+}
+
+// Toast notification
+function showToast(message, showUndo = false) {
+  // Clear any existing toast
+  const existingToast = document.querySelector('.toast-notification');
+  if (existingToast) {
+    existingToast.remove();
+  }
+  
+  // Clear existing undo timeout
+  if (undoTimeout) {
+    clearTimeout(undoTimeout);
+  }
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+  toast.appendChild(messageSpan);
+  
+  if (showUndo) {
+    const undoBtn = document.createElement('button');
+    undoBtn.className = 'toast-undo-btn';
+    undoBtn.textContent = 'Undo';
+    undoBtn.onclick = handleUndo;
+    toast.appendChild(undoBtn);
+  }
+  
+  document.body.appendChild(toast);
+  
+  // Auto-hide and clear undo data after 5 seconds
+  undoTimeout = setTimeout(() => {
+    toast.remove();
+    undoData = null;
+    undoTimeout = null;
+  }, 5000);
+}
+
+// Undo functionality
+async function handleUndo() {
+  if (!undoData) return;
+  
+  if (undoData.type === 'bookmark') {
+    // Restore deleted bookmark
+    bookmarks.push(undoData.bookmark);
+    await Storage.set('bookmarks', bookmarks);
+    renderCategories();
+    showToast(`Bookmark "${undoData.bookmark.title}" restored`);
+  } else if (undoData.type === 'category') {
+    // Restore deleted category
+    categories.push(undoData.category);
+    
+    // Move bookmarks back to the restored category
+    bookmarks = bookmarks.map(b => {
+      const wasInCategory = undoData.bookmarks.find(cb => cb.id === b.id);
+      if (wasInCategory) {
+        b.categoryId = undoData.category.id;
+      }
+      return b;
+    });
+    
+    await Storage.set('categories', categories);
+    await Storage.set('bookmarks', bookmarks);
+    renderCategories();
+    showToast(`Category "${undoData.category.name}" restored`);
+  }
+  
+  // Clear undo data
+  undoData = null;
+  
+  // Remove toast
+  const toast = document.querySelector('.toast-notification');
+  if (toast) {
+    toast.remove();
+  }
+  
+  if (undoTimeout) {
+    clearTimeout(undoTimeout);
+    undoTimeout = null;
   }
 }
 
