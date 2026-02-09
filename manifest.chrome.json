@@ -1,20 +1,22 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Smart Bookmarks Manager",
   "version": "1.0.6",
   "description": "Organize your bookmarks with ease. Quick bookmark sites and manage them later with categories.",
   "permissions": [
-    "bookmarks",
     "storage",
     "tabs",
     "notifications",
-    "menus",
+    "contextMenus",
+    "scripting"
+  ],
+  "host_permissions": [
     "<all_urls>"
   ],
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
@@ -24,7 +26,7 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "commands": {
     "quick-bookmark": {
@@ -32,14 +34,6 @@
         "default": "Ctrl+Shift+Period"
       },
       "description": "Quick bookmark current page"
-    }
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "smart-bookmarks-manager@lorne.dev",
-      "data_collection_permissions": {
-        "required": ["none"]
-      }
     }
   },
   "options_ui": {

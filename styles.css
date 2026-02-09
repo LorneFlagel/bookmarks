@@ -249,6 +249,17 @@ header h1 {
   display: none;
 }
 
+.bookmark-notes {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  margin-top: 2px;
+}
+
 .add-bookmark-btn {
   width: 100%;
   padding: 15px;
@@ -300,13 +311,20 @@ header h1 {
 }
 
 .modal-content input,
-.modal-content select {
+.modal-content select,
+.modal-content textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
+  font-family: inherit;
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 60px;
 }
 
 .modal-content p {
@@ -466,10 +484,15 @@ body.dark .modal-content h2 {
 }
 
 body.dark .modal-content input,
-body.dark .modal-content select {
+body.dark .modal-content select,
+body.dark .modal-content textarea {
   background: #2a2a3d;
   border-color: #444;
   color: #e0e0e0;
+}
+
+body.dark .bookmark-notes {
+  color: #777;
 }
 
 body.dark .modal-content p {

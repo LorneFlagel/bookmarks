@@ -333,6 +333,13 @@ function createBookmarkCard(bookmark) {
   info.appendChild(title);
   info.appendChild(url);
   
+  if (bookmark.notes) {
+    const notes = document.createElement('div');
+    notes.className = 'bookmark-notes';
+    notes.textContent = bookmark.notes;
+    info.appendChild(notes);
+  }
+  
   content.appendChild(icon);
   content.appendChild(info);
   
@@ -464,11 +471,13 @@ function openBookmarkModal(bookmark = null, categoryId = null) {
     titleInput.value = bookmark.title;
     urlInput.value = bookmark.url;
     categorySelect.value = bookmark.categoryId;
+    document.getElementById('bookmark-notes-input').value = bookmark.notes || '';
   } else {
     title.textContent = 'Add Bookmark';
     titleInput.value = '';
     urlInput.value = '';
     categorySelect.value = categoryId || 'new';
+    document.getElementById('bookmark-notes-input').value = '';
   }
   
   modal.classList.remove('hidden');
@@ -488,6 +497,7 @@ async function saveBookmark() {
   const title = titleInput.value.trim();
   const url = urlInput.value.trim();
   const categoryId = categorySelect.value;
+  const notes = document.getElementById('bookmark-notes-input').value.trim();
   
   if (!title || !url) {
     alert('Please enter both title and URL');
@@ -514,7 +524,8 @@ async function saveBookmark() {
       ...bookmarks[index],
       title,
       url,
-      categoryId
+      categoryId,
+      notes
     };
   } else {
     // Add new bookmark
@@ -523,6 +534,7 @@ async function saveBookmark() {
       title,
       url,
       categoryId,
+      notes,
       createdAt: Date.now()
     };
     bookmarks.push(newBookmark);
@@ -758,6 +770,14 @@ function setupEventListeners() {
       });
     }
     if (e.key === 'Enter') {
+      // Allow Shift+Enter to add new lines in textareas
+      if (e.target.tagName === 'TEXTAREA' && e.shiftKey) {
+        return;
+      }
+      // Don't save when typing normally in a textarea
+      if (e.target.tagName === 'TEXTAREA') {
+        return;
+      }
       const categoryModal = document.getElementById('category-modal');
       const bookmarkModal = document.getElementById('bookmark-modal');
       const importModal = document.getElementById('import-modal');

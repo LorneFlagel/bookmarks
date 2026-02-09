@@ -52,11 +52,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     // Add new bookmark
+    const notes = document.getElementById('bookmark-notes').value.trim();
     const newBookmark = {
       id: 'bm_' + Date.now(),
       title,
       url,
       categoryId,
+      notes,
       createdAt: Date.now()
     };
     
